@@ -11,10 +11,29 @@
                 onImageUpload: function(files) {
                     for (let i = 0; i < files.length; i++) {
                         $.upload(files[i]);
+
                     }
                 }
             },
+            height: 200,
+            toolbar: [
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["fontname", ["fontname"]],
+                ["fontsize", ["fontsize"]],
+                ["color", ["color"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["height", ["height"]],
+                ["insert", ["link", "picture", "imageList", "video", "hr"]],
+                ["help", ["help"]]
+            ],
+            dialogsInBody: true,
+            imageList: {
+                endpoint: "image-list.php",
+                fullUrlPrefix: "images/",
+                thumbUrlPrefix: "images/thumb/"
+            }
         });
+
 
         $.upload = function(file) {
             let out = new FormData();
