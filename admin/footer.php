@@ -29,8 +29,8 @@
             dialogsInBody: true,
             imageList: {
                 endpoint: "image-list.php",
-                fullUrlPrefix: "images/",
-                thumbUrlPrefix: "images/thumb/"
+                fullUrlPrefix: "../images/",
+                thumbUrlPrefix: "../images/"
             }
         });
 
