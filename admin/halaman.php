@@ -1,6 +1,20 @@
 <?php include("header.php") ?>
 <?php
+$sukses = "";
 $katakunci = (isset($_GET['katakunci'])) ? $_GET['katakunci'] : "";
+if (isset($_GET['op'])) {
+    $op = $_GET['op'];
+} else {
+    $op = "";
+}
+if ($op == 'delete') {
+    $id = $_GET['id'];
+    $sql1 = "delete from halaman where id = $id";
+    $q1   = mysqli_query($koneksi, $sql1);
+    if ($q1) {
+        $sukses = "data behasil dihapus";
+    }
+}
 ?>
 <h1>Dashboard</h1>
 <p>
@@ -8,6 +22,16 @@ $katakunci = (isset($_GET['katakunci'])) ? $_GET['katakunci'] : "";
         <input type="button" class="btn btn-primary" value="membuat halaman baru" />
     </a>
 </p>
+<?php
+if ($sukses) {
+?>
+    <div class="alert alert-primary" role="alert">
+        <?php echo $sukses ?>
+    </div>
+<?php
+}
+?>
+
 <form class="row g-2" method="get">
     <div class="col-auto">
         <input type="text" class="form-control" placeholder="masukkan kata kunci" name="katakunci"
@@ -47,7 +71,9 @@ $katakunci = (isset($_GET['katakunci'])) ? $_GET['katakunci'] : "";
                 <td><?php echo $r1['kutipan'] ?></td>
                 <td>
                     <span class="badge text-bg-warning">Edit</span>
-                    <span class="badge text-bg-danger">Delete</span>
+                    <a href="halaman.php?op=delete&id=<?php echo $r1['id'] ?>" onclick="return confirm('apakah anda yakin menghapus data ini?')">
+                        <span class="badge text-bg-danger">Delete</span>
+                    </a>
                 </td>
             </tr>
         <?php
