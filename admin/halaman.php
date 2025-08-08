@@ -53,6 +53,7 @@ if ($sukses) {
     <tbody>
         <?php
         $sqltambahan = "";
+        $per_halaman = 2; // jumlah data per halaman
         if ($katakunci != '') {
             $array_katakunci = explode(" ", $katakunci);
             for ($x = 0; $x < count($array_katakunci); $x++) {
@@ -60,9 +61,17 @@ if ($sukses) {
             }
             $sqltambahan = " where " . implode(" or ", $sqlcari);
         }
-        $sql1 = "select * from halaman $sqltambahan order by id desc";
-        $q1   = mysqli_query($koneksi, $sql1);
-        $nomor = 1;
+        $sql1   = "select * from halaman $sqltambahan ";
+        $page   = isset($_GET['page'])?(int)$_GET['page']:1;
+        $mulai  = ($page > 1)? ($page * $per_halaman) - $per_halaman:0;
+        $q1     = mysqli_query($koneksi, $sql1);
+        $total  = mysqli_num_rows($q1);
+        $pages  = ceil($total/$per_halaman);
+        $nomor  = $mulai + 1;
+        $sql1   = $sql1. " order by id desc limit $mulai,$per_halaman";
+
+        $q1     = mysqli_query($koneksi, $sql1);
+       
         while ($r1 = mysqli_fetch_array($q1)) {
         ?>
             <tr>
@@ -82,4 +91,20 @@ if ($sukses) {
 
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <?php
+        $cari = (isset($_GET['cari']))? $_GET['cari'] : "";
+        for($i=1; $i <= $pages; $i++){
+            ?>
+            <li class="page-item">
+                <a class="page-link" href="halaman.php?katakunci=<?php echo $katakunci ?>&cari= <?php echo $cari?>&page=<?php echo $i?> "><?php echo $i ?></a>
+            </li>
+            <?php
+        }
+        ?>
+    </ul>
+
+</nav>
 <?php include("footer.php") ?>
